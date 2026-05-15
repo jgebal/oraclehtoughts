@@ -8,6 +8,8 @@ extra_css:
   - stylesheets/extra.css
 theme:
   name: material
+  logo: assets/logo-thinking-smile.png
+  favicon: assets/logo-thinking-smile.png
   palette:
   - scheme: default
     primary: deep orange
@@ -26,6 +28,8 @@ theme:
     - navigation.sections
     - navigation.top
     - navigation.indexes
+    - navigation.footer
+    - navigation.tracking
     - search.suggest
     - search.highlight
     - content.code.copy
@@ -53,4 +57,4 @@ markdown_extensions:
 #  - Home: index.md
 #  - Blog:
 #      - blog/index.md
-#  - About: pages/about.md
+#  - About: about.md
