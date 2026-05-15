@@ -1,0 +1,56 @@
+site_name: Oracle Thoughts
+site_url: https://jgebal.github.io/oraclethoughts
+site_author: Jacek Gebal
+site_description: Oracle database, PL/SQL development, unit testing and utPLSQL
+repo_url: https://github.com/jgebal/oraclethoughts
+repo_name: jgebal/oraclethoughts
+extra_css:
+  - stylesheets/extra.css
+theme:
+  name: material
+  palette:
+  - scheme: default
+    primary: deep orange
+    accent: orange
+    toggle:
+      icon: material/brightness-7
+      name: Switch to dark mode
+  - scheme: slate
+    primary: deep orange
+    accent: orange
+    toggle:
+      icon: material/brightness-4
+      name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
+plugins:
+  - search
+  - blog
+  - tags
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - pymdownx.blocks.caption
+  - pymdownx.highlight
+  - pymdownx.superfences: {}
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.details
+  - tables
+  - toc:
+      permalink: true
+#nav:
+#  - Home: index.md
+#  - Blog:
+#      - blog/index.md
+#  - About: pages/about.md
