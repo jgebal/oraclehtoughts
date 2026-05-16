@@ -1,0 +1,1940 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Oracle database, PL/SQL development, unit testing and utPLSQL">
+      
+      
+        <meta name="author" content="Jacek Gebal">
+      
+      
+        <link rel="canonical" href="https://jgebal.github.io/oraclethoughts/blog/2015/06/28/utplsql-v2-vs-ruby-plsqlruby-plsql-spec-part-three/">
+      
+      
+        <link rel="prev" href="../../24/utplsql-v2-vs-ruby-plsqlruby-plsql-spec-part-two/">
+      
+      
+        <link rel="next" href="../../../07/11/utplsql-v2-vs-ruby-plsql-running-oracle-unit-tests-on-jenkins-ci/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../assets/logo-thinking-smile.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>utPLSQL v2 vs. ruby-plsql/ruby-plsql-spec - part three - (not) reporting failures - Oracle Thoughts</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#additional-reporting-options-for-ruby-plsql" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Oracle Thoughts" class="md-header__button md-logo" aria-label="Oracle Thoughts" data-md-component="logo">
+      
+  <img src="../../../../../assets/logo-thinking-smile.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Oracle Thoughts
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              utPLSQL v2 vs. ruby-plsql/ruby-plsql-spec - part three - (not) reporting failures
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/jgebal/oraclethoughts" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jgebal/oraclethoughts
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Blog
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  About
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Oracle Thoughts" class="md-nav__button md-logo" aria-label="Oracle Thoughts" data-md-component="logo">
+      
+  <img src="../../../../../assets/logo-thinking-smile.png" alt="logo">
+
+    </a>
+    Oracle Thoughts
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/jgebal/oraclethoughts" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jgebal/oraclethoughts
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Blog
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Archive
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Archive
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2020
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2017/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2017
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2016/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2016
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2015/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2015
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2014/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2014
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Categories
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Categories
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/plsql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PLSQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/sql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/sqlplus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SQL*Plus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/performance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/ruby-plsql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ruby-plsql
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/utplsql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    utPLSQL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2015-06-28 00:00:00+00:00" class="md-ellipsis">June 28, 2015</time>
+                      </div>
+                    </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            in
+                            
+                              <a href="../../../../category/plsql/">PLSQL</a>, 
+                              <a href="../../../../category/testing/">testing</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              17 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+  <nav class="md-tags" >
+    
+      
+      
+      
+      
+        <a href="../../../../tags/#tag:oracle" class="md-tag">Oracle</a>
+      
+    
+      
+      
+      
+      
+        <a href="../../../../tags/#tag:ruby" class="md-tag">Ruby</a>
+      
+    
+      
+      
+      
+      
+        <a href="../../../../tags/#tag:tdd" class="md-tag">TDD</a>
+      
+    
+      
+      
+      
+      
+        <a href="../../../../tags/#tag:utplsql" class="md-tag">UTPLSQL</a>
+      
+    
+      
+      
+      
+      
+        <a href="../../../../tags/#tag:ruby-plsql" class="md-tag">ruby-plsql</a>
+      
+    
+      
+      
+      
+      
+        <a href="../../../../tags/#tag:unit-testing" class="md-tag">unit testing</a>
+      
+    
+  </nav>
+
+
+  
+  
+
+
+<p><img alt="UTPLSQL_vs_RSpec" src="../../../../../images/UTPLSQL_vs_RSpec-300x56.png" /></p>
+<p>I have finished my <a href="../../24/utplsql-v2-vs-ruby-plsqlruby-plsql-spec-part-two/">previous post</a> with comparison of basic reporting capabilities build into UTPLSQL and ruby-plsql frameworks for Oracle unit testing.</p>
+<!-- more -->
+
+<h1 id="additional-reporting-options-for-ruby-plsql">Additional reporting options for ruby-plsql<a class="headerlink" href="#additional-reporting-options-for-ruby-plsql" title="Permanent link">&para;</a></h1>
+<p>So far I have been using the ruby-plsql-spec wrapper around RSpec to run unit tests, however ruby-plsql was created in a way, that developer is not limited to use the functionalities of ruby-plsql-spec only.
+To run ruby-plsql unit tests we can use command <code>plsql-spec run</code>  that is provided with ruby-plsql-spec library or use the <code>rspec</code> command that comes with RSpec library.
+Using RSpec allows richer build-in reporting capabilities.
+A short look at <code>rspec --help</code> shows:</p>
+<div class="highlight"><pre><span></span><code>  **** Output ****
+
+    -f, --format FORMATTER           Choose a formatter.
+                                       [p]rogress (default - dots)
+                                       [d]ocumentation (group and example names)
+                                       [h]tml
+                                       [j]son
+                                       custom formatter class name
+    -o, --out FILE                   Write output to a file instead of $stdout. This option applies
+                                       to the previously specified --format, or the default format
+                                       if no format is specified.
+        --deprecation-out FILE       Write deprecation warnings to a file instead of $stderr.
+    -b, --backtrace                  Enable full backtrace.
+    -c, --[no-]color, --[no-]colour  Enable color in the output.
+    -p, --[no-]profile [COUNT]       Enable profiling of examples and list the slowest examples (default: 10).
+    -w, --warnings                   Enable ruby warnings
+</code></pre></div>
+<p>Just to remind, those are the outcomes of UTPLSQL reporter for execution <strong>of a single test</strong>.</p>
+<div class="highlight"><pre><span></span><code>SQL&gt; SET SERVEROUTPUT ON 
+SQL&gt; BEGIN
+  2    utplsql.test(&#39;message_api&#39;);
+  3  END;
+  4  /
+
+&gt;    SSSS   U     U   CCC     CCC   EEEEEEE   SSSS     SSSS
+&gt;   S    S  U     U  C   C   C   C  E        S    S   S    S
+&gt;  S        U     U C     C C     C E       S        S
+&gt;   S       U     U C       C       E        S        S
+&gt;    SSSS   U     U C       C       EEEE      SSSS     SSSS
+&gt;        S  U     U C       C       E             S        S
+&gt;         S U     U C     C C     C E              S        S
+&gt;   S    S   U   U   C   C   C   C  E        S    S   S    S
+&gt;    SSSS     UUU     CCC     CCC   EEEEEEE   SSSS     SSSS
+.
+SUCCESS: &quot;.message_api&quot;
+.
+&gt; Individual Test Case Results:
+&gt;
+SUCCESS - message_api.UT_SEND_RECEIVE_MSG: EQ &quot;when I send a message and receive
+it then I get a valid message number&quot; Expected &quot;1&quot; and got &quot;1&quot;
+&gt;
+SUCCESS - message_api.UT_SEND_RECEIVE_MSG: EQ &quot;and I get a valid message date&quot;
+Expected &quot;JUN-23-2015 12:00:00&quot; and got &quot;JUN-23-2015 12:00:00&quot;
+&gt;
+</code></pre></div>
+<p>When we run <code>rpsec -fd</code>, we get a documentation format for <strong>three unit tests</strong> in a very human readable form as below.</p>
+<div class="highlight"><pre><span></span><code>cross session communication package
+  allows receiving message sent in one session
+  allows sending and receiving message across different sessions
+  allows sending and receiving message across sessions of different users
+
+Finished in 0.07851 seconds (files took 2.03 seconds to load)
+3 examples, 0 failures
+</code></pre></div>
+<p>Using <code>rspec -fj -o rspec_test_results.json</code> we can generate output of tests into <a href="../../images/rspec_test_results.json">rspec_test_results.json</a> file.
+Using <code>rspec -fh -o rspec_test_results.html</code> we can generate output of tests into <a href="../../images/rspec_test_results.html">rspec_test_results.html</a> file.
+By installing library RspecJunitFormatter <code>gem install rspec_junit_formatter</code> we can have output generated into <a href="../../images/rspec_test_results.xml">rspec_test_results.xml</a> XML format that is accepted by many Continuous Integration platforms like Jenkins.
+All that needs to be done to have the XML JUnit-like output is to issue <code>rspec -f RspecJunitFormatter -o rspec_test_results.xml</code>.
+I have described only the basic options of the formatting, there are many more formatters out there to be used, there are many different options of controlling how RSpec is executing tests like ordering, filtering, stop on first failure, dry-run and more.</p>
+<h1 id="handling-test-failures">Handling test failures<a class="headerlink" href="#handling-test-failures" title="Permanent link">&para;</a></h1>
+<p>Unit tests are being created to give a fast and clear feedback, when something goes wrong and a requirement for code is no longer met.
+Let's have a look, how UTPLSQL and ruby-plsql (with RSpec) are reporting test failures and errors.
+There are quite significant differences on how each of them is reporting errors and also <strong>when and how they fail</strong>.</p>
+<h1 id="graceful-failure">Graceful failure<a class="headerlink" href="#graceful-failure" title="Permanent link">&para;</a></h1>
+<p>This is the scenario, where a unit test is actually doing it's job by failing. The test fails to indicate that a requirement that is being verified, is not met.
+For this scenario I will use a very simple code and similarly simple tests.
+The tested code is:</p>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">sum_two_numbers</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">NUMBER</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">NUMBER</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">NUMBER</span><span class="w"> </span><span class="k">IS</span>
+<span class="w">  </span><span class="k">BEGIN</span>
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">END</span><span class="p">;</span>
+<span class="o">/</span>
+</code></pre></div>
+<p>The UTPLSQL unit test for this code is:</p>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="n">PACKAGE</span><span class="w"> </span><span class="n">ut_sum_two_numbers</span>
+<span class="k">IS</span>
+<span class="w">  </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">ut_setup</span><span class="p">;</span>
+<span class="w">  </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">ut_teardown</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">ut_sum_two_numbers</span><span class="p">;</span>
+<span class="k">END</span><span class="w"> </span><span class="n">ut_sum_two_numbers</span><span class="p">;</span>
+<span class="o">/</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="n">PACKAGE</span><span class="w"> </span><span class="n">BODY</span><span class="w"> </span><span class="n">ut_sum_two_numbers</span>
+<span class="k">IS</span>
+<span class="w">  </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">ut_setup</span>
+<span class="w">  </span><span class="k">IS</span>
+<span class="w">    </span><span class="k">BEGIN</span>
+<span class="w">      </span><span class="k">NULL</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">ut_teardown</span>
+<span class="w">  </span><span class="k">IS</span>
+<span class="w">    </span><span class="k">BEGIN</span>
+<span class="w">      </span><span class="k">NULL</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">ut_sum_two_numbers</span>
+<span class="w">  </span><span class="k">IS</span>
+<span class="w">    </span><span class="k">BEGIN</span>
+<span class="w">      </span><span class="n">utAssert</span><span class="p">.</span><span class="n">eq</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;sum_two_numbers returns 10 for arguments 5 and 5&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">sum_two_numbers</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">);</span>
+<span class="w">    </span><span class="k">END</span><span class="p">;</span>
+
+<span class="k">END</span><span class="w"> </span><span class="n">ut_sum_two_numbers</span><span class="p">;</span>
+<span class="o">/</span>
+</code></pre></div>
+<p>And the ruby-plsql unit test for this code, doing exactly the same check is:</p>
+<div class="highlight"><pre><span></span><code><span class="n">require_relative</span><span class="w"> </span><span class="s1">&#39;spec_helper&#39;</span>
+
+<span class="n">describe</span><span class="w"> </span><span class="s1">&#39;sum_two_numbers&#39;</span><span class="w"> </span><span class="k">do</span>
+
+<span class="w">  </span><span class="n">it</span><span class="w"> </span><span class="s1">&#39;returns 10 for arguments 5 and 5&#39;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="n">expect</span><span class="p">(</span><span class="w"> </span><span class="n">plsql</span><span class="o">.</span><span class="n">sum_two_numbers</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="w"> </span><span class="n">eq</span><span class="w"> </span><span class="mi">10</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="k">end</span>
+</code></pre></div>
+<p>The over-sizing of UPLSQL is clearly visible when handling small test-case.
+Output from UTPLSQL test run.</p>
+<div class="highlight"><pre><span></span><code><span class="k">SET</span><span class="w"> </span><span class="n">SERVEROUPTUT</span><span class="w"> </span><span class="k">ON</span>
+<span class="k">BEGIN</span>
+<span class="w">  </span><span class="n">utConfig</span><span class="p">.</span><span class="n">autocompile</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+<span class="w">  </span><span class="n">utConfig</span><span class="p">.</span><span class="n">setreporter</span><span class="p">(</span><span class="k">NULL</span><span class="p">);</span>
+<span class="w">  </span><span class="n">utplsql</span><span class="p">.</span><span class="n">test</span><span class="p">(</span><span class="s1">&#39;sum_two_numbers&#39;</span><span class="p">);</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="o">/</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>.
+&gt;  FFFFFFF   AA     III  L      U     U RRRRR   EEEEEEE
+&gt;  F        A  A     I   L      U     U R    R  E
+&gt;  F       A    A    I   L      U     U R     R E
+&gt;  F      A      A   I   L      U     U R     R E
+&gt;  FFFF   A      A   I   L      U     U RRRRRR  EEEE
+&gt;  F      AAAAAAAA   I   L      U     U R   R   E
+&gt;  F      A      A   I   L      U     U R    R  E
+&gt;  F      A      A   I   L       U   U  R     R E
+&gt;  F      A      A  III  LLLLLLL  UUU   R     R EEEEEEE
+.
+FAILURE: &quot;.sum_two_numbers&quot;
+.
+&gt; Individual Test Case Results:
+&gt;
+FAILURE - sum_two_numbers.UT_SUM_TWO_NUMBERS: EQ &quot;sum_two_numbers returns 10 for
+arguments 5 and 5&quot; Expected &quot;10&quot; and got &quot;11&quot;
+&gt;
+&gt;
+&gt; Errors recorded in utPLSQL Error Log:
+&gt;
+&gt; NONE FOUND
+
+PL/SQL procedure successfully completed.
+</code></pre></div>
+<p>Output from ruby-plsql-spec test run.</p>
+<div class="highlight"><pre><span></span><code>rspec -fd spec/sum_two_numbers_spec.rb
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>sum_two_numbers
+  returns 10 for arguments 5 and 5 (FAILED - 1)
+
+Failures:
+
+  1) sum_two_numbers returns 10 for arguments 5 and 5
+     Failure/Error: expect( plsql.sum_two_numbers(5,5) ).to eq 10
+
+       expected: 10
+            got: 11
+
+       (compared using ==)
+     # ./spec/sum_two_numbers_spec.rb:6:in `block (2 levels) in &lt;top (required)&gt;&#39;
+
+Finished in 0.0335 seconds (files took 2.41 seconds to load)
+1 example, 1 failure
+
+Failed examples:
+
+rspec ./spec/sum_two_numbers_spec.rb:5 # sum_two_numbers returns 10 for arguments 5 and 5
+</code></pre></div>
+<p>At first glance both reports seem to be similar. There are significant differences though.</p>
+<ul>
+<li>UTPLSQL is showing the package and procedure name, assertion name and type and the values compared</li>
+<li>RSpec is showing the spec file location and name, name of the test, assertion type, values compared and the line number for failure</li>
+<li>UTPLSQL <strong>has no summary of tests</strong>, we don't know how many tests were executed, how many succeeded an how many failed</li>
+<li>RSpec provides a summary report showing all that is needed to investigate the failures</li>
+<li>UTPLSQL announces big status at the <strong>beginning</strong> of textual report</li>
+<li>RSpec displays summary report at the <strong>end</strong> of textual report</li>
+</ul>
+<h1 id="reporting-on-large-number-of-tests">Reporting on large number of tests<a class="headerlink" href="#reporting-on-large-number-of-tests" title="Permanent link">&para;</a></h1>
+<p>The differences might seem slight and of a low value until you run a large set of tests.
+I will simulate 100 tests by simply calling the function 100 times with different set of parameters.
+I've created a separate function that causes wrong result for one value of parameter 'a'.</p>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="k">REPLACE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">sum_two_numbers_100_times</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="nb">NUMBER</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">NUMBER</span><span class="p">)</span><span class="w"> </span><span class="k">RETURN</span><span class="w"> </span><span class="nb">NUMBER</span><span class="w"> </span><span class="k">IS</span>
+<span class="w">  </span><span class="k">BEGIN</span>
+<span class="w">    </span><span class="k">RETURN</span><span class="w"> </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">41</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">END</span><span class="p">;</span>
+<span class="w">  </span><span class="k">END</span><span class="p">;</span>
+</code></pre></div>
+<p>I've added new test procedure to UTPLSQL tests package</p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">ut_sum_two_numbers_100_times</span>
+<span class="w">  </span><span class="k">IS</span>
+<span class="w">    </span><span class="k">BEGIN</span>
+<span class="w">      </span><span class="k">FOR</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">..</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="n">LOOP</span>
+<span class="w">        </span><span class="n">utAssert</span><span class="p">.</span><span class="n">eq</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;sum_two_numbers returns &#39;</span><span class="o">||</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">10</span><span class="p">)</span><span class="o">||</span><span class="s1">&#39; for arguments &#39;</span><span class="o">||</span><span class="n">i</span><span class="o">||</span><span class="s1">&#39; and 10&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">sum_two_numbers_100_times</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
+<span class="w">      </span><span class="k">END</span><span class="w"> </span><span class="n">LOOP</span><span class="p">;</span>
+<span class="w">    </span><span class="k">END</span><span class="p">;</span>
+</code></pre></div>
+<p>and a new test in a loop to my spec file.</p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="mi">100</span><span class="o">.</span><span class="n">times</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">i</span><span class="o">|</span>
+<span class="w">    </span><span class="n">it</span><span class="w"> </span><span class="s2">&quot;returns </span><span class="si">#{</span><span class="n">i</span><span class="o">+</span><span class="mi">10</span><span class="si">}</span><span class="s2"> for arguments </span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="s2"> and 10&quot;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">      </span><span class="n">expect</span><span class="p">(</span><span class="w"> </span><span class="n">plsql</span><span class="o">.</span><span class="n">sum_two_numbers_100_times</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="w"> </span><span class="n">eq</span><span class="w"> </span><span class="n">i</span><span class="o">+</span><span class="mi">10</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+</code></pre></div>
+<p>When looking at the test outputs, keep in mind that using a text output to console makes the console scroll, and that you can see once the tests finish, are the very last lines of the output.
+To mimic, what you will see, it's best to scroll to the end of the report output block.</p>
+<div class="highlight"><pre><span></span><code>.
+&gt;  FFFFFFF   AA     III  L      U     U RRRRR   EEEEEEE
+&gt;  F        A  A     I   L      U     U R    R  E
+&gt;  F       A    A    I   L      U     U R     R E
+&gt;  F      A      A   I   L      U     U R     R E
+&gt;  FFFF   A      A   I   L      U     U RRRRRR  EEEE
+&gt;  F      AAAAAAAA   I   L      U     U R   R   E
+&gt;  F      A      A   I   L      U     U R    R  E
+&gt;  F      A      A   I   L       U   U  R     R E
+&gt;  F      A      A  III  LLLLLLL  UUU   R     R EEEEEEE
+.
+FAILURE: &quot;.sum_two_numbers&quot;
+.
+&gt; Individual Test Case Results:
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS: EQ &quot;sum_two_numbers returns 10 for
+arguments 5 and 5&quot; Expected &quot;10&quot; and got &quot;10&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 11 for arguments 1 and 10&quot; Expected &quot;11&quot; and got &quot;11&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 12 for arguments 2 and 10&quot; Expected &quot;12&quot; and got &quot;12&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 13 for arguments 3 and 10&quot; Expected &quot;13&quot; and got &quot;13&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 14 for arguments 4 and 10&quot; Expected &quot;14&quot; and got &quot;14&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 15 for arguments 5 and 10&quot; Expected &quot;15&quot; and got &quot;15&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 16 for arguments 6 and 10&quot; Expected &quot;16&quot; and got &quot;16&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 17 for arguments 7 and 10&quot; Expected &quot;17&quot; and got &quot;17&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 18 for arguments 8 and 10&quot; Expected &quot;18&quot; and got &quot;18&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 19 for arguments 9 and 10&quot; Expected &quot;19&quot; and got &quot;19&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 20 for arguments 10 and 10&quot; Expected &quot;20&quot; and got &quot;20&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 21 for arguments 11 and 10&quot; Expected &quot;21&quot; and got &quot;21&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 22 for arguments 12 and 10&quot; Expected &quot;22&quot; and got &quot;22&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 23 for arguments 13 and 10&quot; Expected &quot;23&quot; and got &quot;23&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 24 for arguments 14 and 10&quot; Expected &quot;24&quot; and got &quot;24&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 25 for arguments 15 and 10&quot; Expected &quot;25&quot; and got &quot;25&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 26 for arguments 16 and 10&quot; Expected &quot;26&quot; and got &quot;26&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 27 for arguments 17 and 10&quot; Expected &quot;27&quot; and got &quot;27&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 28 for arguments 18 and 10&quot; Expected &quot;28&quot; and got &quot;28&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 29 for arguments 19 and 10&quot; Expected &quot;29&quot; and got &quot;29&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 30 for arguments 20 and 10&quot; Expected &quot;30&quot; and got &quot;30&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 31 for arguments 21 and 10&quot; Expected &quot;31&quot; and got &quot;31&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 32 for arguments 22 and 10&quot; Expected &quot;32&quot; and got &quot;32&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 33 for arguments 23 and 10&quot; Expected &quot;33&quot; and got &quot;33&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 34 for arguments 24 and 10&quot; Expected &quot;34&quot; and got &quot;34&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 35 for arguments 25 and 10&quot; Expected &quot;35&quot; and got &quot;35&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 36 for arguments 26 and 10&quot; Expected &quot;36&quot; and got &quot;36&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 37 for arguments 27 and 10&quot; Expected &quot;37&quot; and got &quot;37&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 38 for arguments 28 and 10&quot; Expected &quot;38&quot; and got &quot;38&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 39 for arguments 29 and 10&quot; Expected &quot;39&quot; and got &quot;39&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 40 for arguments 30 and 10&quot; Expected &quot;40&quot; and got &quot;40&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 41 for arguments 31 and 10&quot; Expected &quot;41&quot; and got &quot;41&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 42 for arguments 32 and 10&quot; Expected &quot;42&quot; and got &quot;42&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 43 for arguments 33 and 10&quot; Expected &quot;43&quot; and got &quot;43&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 44 for arguments 34 and 10&quot; Expected &quot;44&quot; and got &quot;44&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 45 for arguments 35 and 10&quot; Expected &quot;45&quot; and got &quot;45&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 46 for arguments 36 and 10&quot; Expected &quot;46&quot; and got &quot;46&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 47 for arguments 37 and 10&quot; Expected &quot;47&quot; and got &quot;47&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 48 for arguments 38 and 10&quot; Expected &quot;48&quot; and got &quot;48&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 49 for arguments 39 and 10&quot; Expected &quot;49&quot; and got &quot;49&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 50 for arguments 40 and 10&quot; Expected &quot;50&quot; and got &quot;50&quot;
+&gt;
+FAILURE - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 51 for arguments 41 and 10&quot; Expected &quot;51&quot; and got &quot;52&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 52 for arguments 42 and 10&quot; Expected &quot;52&quot; and got &quot;52&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 53 for arguments 43 and 10&quot; Expected &quot;53&quot; and got &quot;53&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 54 for arguments 44 and 10&quot; Expected &quot;54&quot; and got &quot;54&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 55 for arguments 45 and 10&quot; Expected &quot;55&quot; and got &quot;55&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 56 for arguments 46 and 10&quot; Expected &quot;56&quot; and got &quot;56&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 57 for arguments 47 and 10&quot; Expected &quot;57&quot; and got &quot;57&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 58 for arguments 48 and 10&quot; Expected &quot;58&quot; and got &quot;58&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 59 for arguments 49 and 10&quot; Expected &quot;59&quot; and got &quot;59&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 60 for arguments 50 and 10&quot; Expected &quot;60&quot; and got &quot;60&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 61 for arguments 51 and 10&quot; Expected &quot;61&quot; and got &quot;61&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 62 for arguments 52 and 10&quot; Expected &quot;62&quot; and got &quot;62&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 63 for arguments 53 and 10&quot; Expected &quot;63&quot; and got &quot;63&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 64 for arguments 54 and 10&quot; Expected &quot;64&quot; and got &quot;64&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 65 for arguments 55 and 10&quot; Expected &quot;65&quot; and got &quot;65&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 66 for arguments 56 and 10&quot; Expected &quot;66&quot; and got &quot;66&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 67 for arguments 57 and 10&quot; Expected &quot;67&quot; and got &quot;67&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 68 for arguments 58 and 10&quot; Expected &quot;68&quot; and got &quot;68&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 69 for arguments 59 and 10&quot; Expected &quot;69&quot; and got &quot;69&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 70 for arguments 60 and 10&quot; Expected &quot;70&quot; and got &quot;70&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 71 for arguments 61 and 10&quot; Expected &quot;71&quot; and got &quot;71&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 72 for arguments 62 and 10&quot; Expected &quot;72&quot; and got &quot;72&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 73 for arguments 63 and 10&quot; Expected &quot;73&quot; and got &quot;73&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 74 for arguments 64 and 10&quot; Expected &quot;74&quot; and got &quot;74&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 75 for arguments 65 and 10&quot; Expected &quot;75&quot; and got &quot;75&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 76 for arguments 66 and 10&quot; Expected &quot;76&quot; and got &quot;76&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 77 for arguments 67 and 10&quot; Expected &quot;77&quot; and got &quot;77&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 78 for arguments 68 and 10&quot; Expected &quot;78&quot; and got &quot;78&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 79 for arguments 69 and 10&quot; Expected &quot;79&quot; and got &quot;79&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 80 for arguments 70 and 10&quot; Expected &quot;80&quot; and got &quot;80&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 81 for arguments 71 and 10&quot; Expected &quot;81&quot; and got &quot;81&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 82 for arguments 72 and 10&quot; Expected &quot;82&quot; and got &quot;82&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 83 for arguments 73 and 10&quot; Expected &quot;83&quot; and got &quot;83&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 84 for arguments 74 and 10&quot; Expected &quot;84&quot; and got &quot;84&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 85 for arguments 75 and 10&quot; Expected &quot;85&quot; and got &quot;85&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 86 for arguments 76 and 10&quot; Expected &quot;86&quot; and got &quot;86&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 87 for arguments 77 and 10&quot; Expected &quot;87&quot; and got &quot;87&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 88 for arguments 78 and 10&quot; Expected &quot;88&quot; and got &quot;88&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 89 for arguments 79 and 10&quot; Expected &quot;89&quot; and got &quot;89&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 90 for arguments 80 and 10&quot; Expected &quot;90&quot; and got &quot;90&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 91 for arguments 81 and 10&quot; Expected &quot;91&quot; and got &quot;91&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 92 for arguments 82 and 10&quot; Expected &quot;92&quot; and got &quot;92&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 93 for arguments 83 and 10&quot; Expected &quot;93&quot; and got &quot;93&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 94 for arguments 84 and 10&quot; Expected &quot;94&quot; and got &quot;94&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 95 for arguments 85 and 10&quot; Expected &quot;95&quot; and got &quot;95&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 96 for arguments 86 and 10&quot; Expected &quot;96&quot; and got &quot;96&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 97 for arguments 87 and 10&quot; Expected &quot;97&quot; and got &quot;97&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 98 for arguments 88 and 10&quot; Expected &quot;98&quot; and got &quot;98&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 99 for arguments 89 and 10&quot; Expected &quot;99&quot; and got &quot;99&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 100 for arguments 90 and 10&quot; Expected &quot;100&quot; and got &quot;100&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 101 for arguments 91 and 10&quot; Expected &quot;101&quot; and got &quot;101&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 102 for arguments 92 and 10&quot; Expected &quot;102&quot; and got &quot;102&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 103 for arguments 93 and 10&quot; Expected &quot;103&quot; and got &quot;103&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 104 for arguments 94 and 10&quot; Expected &quot;104&quot; and got &quot;104&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 105 for arguments 95 and 10&quot; Expected &quot;105&quot; and got &quot;105&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 106 for arguments 96 and 10&quot; Expected &quot;106&quot; and got &quot;106&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 107 for arguments 97 and 10&quot; Expected &quot;107&quot; and got &quot;107&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 108 for arguments 98 and 10&quot; Expected &quot;108&quot; and got &quot;108&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 109 for arguments 99 and 10&quot; Expected &quot;109&quot; and got &quot;109&quot;
+&gt;
+SUCCESS - sum_two_numbers.UT_SUM_TWO_NUMBERS_100_TIMES: EQ &quot;sum_two_numbers
+returns 110 for arguments 100 and 10&quot; Expected &quot;110&quot; and got &quot;110&quot;
+&gt;
+&gt;
+&gt; Errors recorded in utPLSQL Error Log:
+&gt;
+&gt; NONE FOUND
+
+PL/SQL procedure successfully completed.
+</code></pre></div>
+<p>The ruby-plsql-spec resutls are very dense, when using the default, progress reporting format.</p>
+<div class="highlight"><pre><span></span><code>rspec spec/sum_two_numbers_spec.rb
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Running specs from spec\sum_two_numbers_spec.rb
+..........................................F..........................................................
+
+Failures:
+
+  1) sum_two_numbers returns 51 for arguments 41 and 10
+     Failure/Error: expect( plsql.sum_two_numbers_100_times(i,10) ).to eq i+10
+
+       expected: 51
+            got: 52
+
+       (compared using ==)
+     # ./spec/sum_two_numbers_spec.rb:11:in `block (3 levels) in &lt;top (required)&gt;&#39;
+
+Finished in 0.70409 seconds (files took 1.46 seconds to load)
+101 examples, 1 failure
+
+Failed examples:
+
+rspec &#39;./spec/sum_two_numbers_spec.rb[1:43]&#39; # sum_two_numbers returns 51 for arguments 41 and 10
+
+Failing tests!
+</code></pre></div>
+<p>If you compare the two reports, you'll clearly notice the huge difference in readability of those two. The RSpec clearly shows what failed and where it failed. In UTPLSQL the information is lost in the amount of SUCCESS noise.</p>
+<h1 id="utplsql-failing-to-run-tests">UTPLSQL failing to run tests<a class="headerlink" href="#utplsql-failing-to-run-tests" title="Permanent link">&para;</a></h1>
+<p><strong>One of the biggest problems with UTPLSQL is the fact that it can't run when dependencies are broken.</strong>
+This makes developers move away from using this tool. As the number of tests grow and database packages grow, one small change to package signature (change of specification) will invalidate all tests against this package and the tests will simply not execute.
+When a change is done to PLSQL package, tests would first need to be fixed before they can be executed. This simple fact makes the existence of the tests a headache for a developer and decreases their value down to almost zero. The tests are unable to give a fast feedback.
+Consider the package <code>message_api</code> code I've used in the <a href="../../14/utplsql-v2-vs-ruby-plsqlruby-plsql-spec-part-one/">first article</a> of this series.
+The package consists of two methods</p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">send_msg</span><span class="w"> </span><span class="p">(</span><span class="n">p_number</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="nb">NUMBER</span><span class="p">,</span><span class="w"> </span><span class="n">p_text</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="n">VARCHAR2</span><span class="p">,</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="nb">DATE</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">SYSDATE</span><span class="p">);</span>
+<span class="w">  </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">receive_msg</span><span class="w"> </span><span class="p">(</span><span class="n">p_number</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="nb">NUMBER</span><span class="p">,</span><span class="w"> </span><span class="n">p_text</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">VARCHAR2</span><span class="p">,</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="nb">DATE</span><span class="p">);</span>
+</code></pre></div>
+<p>What will happen, when I will add or remove or change the ordering of parameters?
+Lets give it a try with adding a parameter to the <code>receive_msg</code> procedure.</p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="k">PROCEDURE</span><span class="w"> </span><span class="n">receive_msg</span><span class="w"> </span><span class="p">(</span><span class="n">p_number</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="nb">NUMBER</span><span class="p">,</span><span class="w"> </span><span class="n">p_text</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="n">VARCHAR2</span><span class="p">,</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="nb">DATE</span><span class="p">,</span><span class="w"> </span><span class="n">p_received_on</span><span class="w"> </span><span class="k">OUT</span><span class="w"> </span><span class="k">TIMESTAMP</span><span class="p">);</span>
+</code></pre></div>
+<p>When I execute my ruby-plsql-spec tests I get the following results</p>
+<div class="highlight"><pre><span></span><code>Running specs from spec\message_api\send_and_receive_spec.rb
+FF.
+
+Failures:
+
+  1) cross session communication package allows receiving message sent in one session
+     Failure/Error: expect( plsql.message_api.receive_msg ).to eq( a_message )
+
+       expected: {:p_number=&gt;1, :p_text=&gt;&quot;a message&quot;, :p_date=&gt;2015-06-27 00:00:00.000000000 +0100}
+            got: {:p_number=&gt;1, :p_text=&gt;&quot;a message&quot;, :p_date=&gt;2015-06-27 00:00:00.000000000 +0100, :p_received_on=&gt;NULL}
+
+       (compared using ==)
+
+       Diff:
+       @@ -1,4 +1,5 @@
+        :p_date =&gt; 2015-06-27 00:00:00.000000000 +0100,
+        :p_number =&gt; 1,
+       +:p_received_on =&gt; NULL,
+        :p_text =&gt; &quot;a message&quot;,
+     # ./spec/message_api/send_and_receive_spec.rb:8:in `block (2 levels) in &lt;top (required)&gt;&#39;
+
+  2) cross session communication package allows sending and receiving message across different sessions
+     Failure/Error: expect( received_values ).to eq( message_values )
+
+       expected: [1, &quot;a message&quot;, 2015-06-27 00:00:00.000000000 +0100]
+            got: [1, &quot;a message&quot;, 2015-06-27 00:00:00.000000000 +0100, NULL]
+
+       (compared using ==)
+     # ./spec/message_api/send_and_receive_spec.rb:15:in `block (2 levels) in &lt;top (required)&gt;&#39;
+
+Finished in 0.06301 seconds (files took 1.63 seconds to load)
+3 examples, 2 failures
+
+Failed examples:
+
+rspec ./spec/message_api/send_and_receive_spec.rb:5 # cross session communication package allows receiving message sent in one session
+rspec ./spec/message_api/send_and_receive_spec.rb:11 # cross session communication package allows sending and receiving message across different sessions
+</code></pre></div>
+<p>The tests results clearly indicate what is happening</p>
+<ul>
+<li>three tests were executed</li>
+<li>two tests failed</li>
+<li>first test failed on comparison of parameter-value pairs and we see a diff of expected/got</li>
+<li>second test failed on comparison of list of returned values and we see that the returned values array contained more than expected</li>
+<li>third test passed, as <strong>it was badly written</strong>. The test was comparing individual elements of return values and a new value returned was simply not tested within the test. This single test is showing one of traps you can come into when unit testing. <strong>One must really understand what is really tested in a test, to make the test reliable and valuable.</strong></li>
+<li>we see the names of failed tests and the lines at which those test failed</li>
+</ul>
+<p>utplsql.test('message_api') I get the following results</p>
+<div class="highlight"><pre><span></span><code>.
+&gt;  FFFFFFF   AA     III  L      U     U RRRRR   EEEEEEE
+&gt;  F        A  A     I   L      U     U R    R  E
+&gt;  F       A    A    I   L      U     U R     R E
+&gt;  F      A      A   I   L      U     U R     R E
+&gt;  FFFF   A      A   I   L      U     U RRRRRR  EEEE
+&gt;  F      AAAAAAAA   I   L      U     U R   R   E
+&gt;  F      A      A   I   L      U     U R    R  E
+&gt;  F      A      A   I   L       U   U  R     R E
+&gt;  F      A      A  III  LLLLLLL  UUU   R     R EEEEEEE
+.
+FAILURE: &quot;.message_api&quot;
+.
+&gt; Individual Test Case Results:
+&gt;
+FAILURE - .: Unable to run ut_message_api.ut_SETUP: ORA-04063: package body
+&quot;TDD_TEST1.UT_MESSAGE_API&quot; has errors
+ORA-06508: PL/SQL: could not find program
+unit being called: &quot;TDD_TEST1.UT_MESSAGE_API&quot;
+&gt;
+FAILURE - .: utPLSQL.test failure: User-Defined Exception
+&gt;
+&gt;
+&gt; Errors recorded in utPLSQL Error Log:
+&gt;
+&gt; NONE FOUND
+BEGIN  utConfig.autocompile(false);  utplsql.test(&#39;message_api&#39;);END;
+*
+ERROR at line 1:
+ORA-06510: PL/SQL: unhandled user-defined exception
+ORA-06512: at &quot;UTP.UTASSERT2&quot;, line 149
+ORA-06512: at &quot;UTP.UTASSERT&quot;, line 49
+ORA-06512: at &quot;UTP.UTPLSQL&quot;, line 952
+ORA-06510: PL/SQL: unhandled user-defined exception
+ORA-06512: at &quot;UTP.UTASSERT2&quot;, line 149
+ORA-06512: at &quot;UTP.UTASSERT&quot;, line 49
+ORA-06512: at &quot;UTP.UTPLSQL&quot;, line 426
+ORA-04063: package body &quot;TDD_TEST1.UT_MESSAGE_API&quot; has errors
+ORA-06508: PL/SQL: could not find program unit being called:
+&quot;TDD_TEST1.UT_MESSAGE_API&quot;
+ORA-06512: at &quot;UTP.UTPLSQL&quot;, line 1109
+ORA-06510: PL/SQL: unhandled user-defined exception
+ORA-06512: at &quot;UTP.UTASSERT2&quot;, line 149
+ORA-06512: at &quot;UTP.UTASSERT&quot;, line 49
+ORA-06512: at &quot;UTP.UTPLSQL&quot;, line 426
+ORA-04063: package body &quot;TDD_TEST1.UT_MESSAGE_API&quot; has errors
+ORA-06508: PL/SQL: could not find program unit being called:
+&quot;TDD_TEST1.UT_MESSAGE_API&quot;
+ORA-06512: at line 1
+</code></pre></div>
+<p>The tests results show failure. But what has really happened?</p>
+<ul>
+<li>No tests were executed</li>
+<li>The tests cannot be executed as the test package is invalid</li>
+<li>There is a stacktrace of errors that allows us to trace how tests are invoked by UTPLSQL but has no value in terms of finding out why there is a problem with test execution</li>
+</ul>
+<p>\
+This example is clearly illustrating problems and difficulties that can be encountered when using UTPLSQL. If we would have a package containing 10,20,50 methods, then <strong>UTPLSQL will fail to test all those methods just because one of them has changed it's signature</strong>. This single fact makes UTPLSQL a bad option when making choice of unit testing framework. The problem is not related to the way UTPLSQL was build, but is strictly related to the way Oracle handles package dependencies.
+There is a way to work around this issue. We can have one test package per one tested method. But that would mean that to test 50 methods in one package you would need to create 50 unit test packages. This is a huge overkill and would create a big mess in the tested database schema, as the number of test packages would dominate the schema source code objects.
+Coming up next ... UTPLSQL not failing where it should.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+        
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../24/utplsql-v2-vs-ruby-plsqlruby-plsql-spec-part-two/" class="md-footer__link md-footer__link--prev" aria-label="Previous: utPLSQL v2 vs. ruby-plsql/ruby-plsql-spec - part two (setup and basic reporting)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                utPLSQL v2 vs. ruby-plsql/ruby-plsql-spec - part two (setup and basic reporting)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../../07/11/utplsql-v2-vs-ruby-plsql-running-oracle-unit-tests-on-jenkins-ci/" class="md-footer__link md-footer__link--next" aria-label="Next: utPLSQL v2 vs. ruby-plsql - Running Oracle unit tests on Jenkins CI">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                utPLSQL v2 vs. ruby-plsql - Running Oracle unit tests on Jenkins CI
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
