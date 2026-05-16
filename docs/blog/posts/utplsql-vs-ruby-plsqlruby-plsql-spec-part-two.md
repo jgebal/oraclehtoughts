@@ -1,8 +1,8 @@
 ---
-title: "UTPLSQL vs. ruby-plsql/ruby-plsql-spec - part two (setup and basic reporting)"
+title: "utPLSQL v2 vs. ruby-plsql/ruby-plsql-spec - part two (setup and basic reporting)"
 date:
   created: 2015-06-24
-slug: utplsql-vs-ruby-plsqlruby-plsql-spec-part-two
+slug: utplsql-v2-vs-ruby-plsqlruby-plsql-spec-part-two
 categories:
   - "PLSQL"
   - "SQL"
@@ -17,10 +17,13 @@ tags:
   - "unit testing"
 ---
 
-[![UTPLSQL_vs_RSpec](../../images/UTPLSQL_vs_RSpec-300x56.png)](../posts/utplsql-vs-ruby-plsqlruby-plsql-spec-part-two.md)
+![UTPLSQL_vs_RSpec](../../images/UTPLSQL_vs_RSpec-300x56.png)
+
 In my [previous post](../posts/utplsql-vs-ruby-plsqlruby-plsql-spec-part-one.md) I have described the conceptual differences between UTPLSQL and ruby-plsql frameworks for unit testing of Oracle database code.
 I have used a message\_api package and unit tests for that API using both frameworks as an example.
 In this post I will focus on getting the tests to run and the feedback that we can we get from the tests using both frameworks.
+
+<!-- more -->
 
 # Before running tests
 

@@ -5,13 +5,11 @@ date:
 slug: test-driven-development-in-oracle-database-with-utplsql-v3-intro
 ---
 
-# Foreword
-
-*The biggest challenge around unit testing is to make it work for you (as an engineer), not against you.*
- 
+*The biggest challenge around unit testing is to make it work for you (as an engineer), not against you.*
+ 
 Many developers struggle, when writing unit tests.
-This is mainly due to the fact that while we are educated in design and implementation of database software, we are not mentored on  unit testing.
-The struggle leads to dissatisfaction, frustration, poor test quality and lack of confidence in values of unit testing as a practice.
+This is mainly due to the fact that while we are educated in design and implementation of database software, we are not mentored on  unit testing.
+The struggle leads to dissatisfaction, frustration, poor test quality and lack of confidence in values of unit testing as a practice.
 Common statements and questions raised in regards to unit testing are:
 
 - *unit tests don't bring any value*
@@ -19,12 +17,14 @@ Common statements and questions raised in regards to unit testing are:
 - *the functionality is too complex to be unit tested*
 - *why should I write unit tests, my code already works as expected*
 
+<!-- more -->
+
 All of the above statements and questions are often valid and definitely should not left unattended.
 
 ### Why should I write unit tests
 
 *The fact that code already works does not make unit testing pointless. It is just harder to see the value of tests.*
- 
+ 
 Unit tests should be written as an example use cases of your code.
 Written that way, unit tests become a living documentation for your code.
 Tests that are documenting code are eventually becoming the ultimate resource of knowledge about *"how the code works"*.
@@ -49,11 +49,11 @@ So here are few reasons why tests could make no sense and bring no value:
 ### Unit testing is too time consuming
 
 *Consider time needed to write a test once and compare it with the time need to thoroughly test the functionality manually each time you change anything.*
-Unit testing is an investment. It will start paying of very quickly if you get it right. If you're able to execute your tests on demand and find out that your system is still fully operational after every change
-If you consider unit testing a waste of time, you're probably missing the big picture.
+Unit testing is an investment. It will start paying of very quickly if you get it right. If you're able to execute your tests on demand and find out that your system is still fully operational after every change
+If you consider unit testing a waste of time, you're probably missing the big picture.
 Here is the thing that is not taken into consideration when raising such claims.
 Unit testing is an engineering practice. As with any engineering practice, it takes time and learning to gain experience and to master it. Writing good unit tests can be hard. It is similar to performing thorough analysis, making solid design and writing good documentation all in one. Just because it's hard it doesn't mean you should give up on it. You should consider this an initial investment, that will significantly pay-off in the long run and allowing you to accelerate your delivery by providing an automated safety harness for your code.
-Engineers that are just starting with unit testing can get easily discouraged, as they try to invent their own practices around unit testing. There is already tons of materials available on the internet around unit testing and Test Driven Development. Though most of them are not referring PLSQL or Databases, they are still of incredible value as most of the learning required is about universal engineering practices and patterns that apply to unit testing. Regardless of language or framework you're using many of them will be applicable.
+Engineers that are just starting with unit testing can get easily discouraged, as they try to invent their own practices around unit testing. There is already tons of materials available on the internet around unit testing and Test Driven Development. Though most of them are not referring PLSQL or Databases, they are still of incredible value as most of the learning required is about universal engineering practices and patterns that apply to unit testing. Regardless of language or framework you're using many of them will be applicable.
 Unit testing pays-off because:
 
 - you invest in re-runnable, reusable code for automated testing
@@ -67,7 +67,7 @@ This claim raises my immediate question. How can you maintain and safely modify 
 The trouble is that we often are tempted to make our code do too much. This is mainly because PL/SQL and even more SQL are such powerful languages. Oracle will execute a 20+ table join SQL query that is 5k lines long without any issues. The challenge comes whenever you need to change one thing in that query and you don't know if everything else will still work.
 So the answer is, split the code into smaller, testable pieces. Separate responsibilities and functionalities so that every module and subprogram can be unit tested and therefore be easy and safe to change.
 
-# Test Driven Development
+### Test Driven Development
 
 This software development practice, allows engineers to switch focus and think about software in terms of business requirements that it satisfies. In the end we're providing solutions that satisfy customer needs.
 Test driven development is a razor-blade focused engineering practice. It's simple and very concrete.
@@ -83,8 +83,8 @@ The whole TDD is a repeated cycle of:
 The below image perfectly summarizes the three phases of Test Driven Development.
 [![tdd_cycle_1048150](../../images/tdd_cycle_1048150.png)](https://blogs.sap.com/2016/10/04/abap-coderetreat-what-happened-in-frankfurt-2016/)
 Test Driven Development focuses on delivering working software that meet specification using very small iterations.
-It is a well-structured, simple and effective practice that enables iterative delivery.
+It is a well-structured, simple and effective practice that enables iterative delivery.
 You can easily track progress and you get a feeling of accomplishment with every new passing test that you add.
- 
- 
+ 
+ 
 In my further posts I'll dive into practical aspects of Unit Testing with utPLSQL v3.

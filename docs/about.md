@@ -3,9 +3,13 @@ title: "About"
 date: 2024-01-01
 ---
 
+My name is Jacek Gębal. I was born in 1977 in Głogów, Poland.
+
+You are looking at my personal blog about Oracle PL/SQL and software development.
+
 ## The Beginning
 
-I was born in 1977 in Głogów, Poland. My passion for computers started in the 1980s, when my father assembled a ZX81 for me and my brother. I was around 10, living in communist Poland, and I was fascinated by the idea that I could instruct a machine to do something for me. That curiosity never left.
+My passion for computers started in the 1980s, when my father assembled a ZX81 for me and my brother. I was around 8 or 10, living in communist Poland, and I was fascinated by the idea that I could instruct a machine to do something for me. That curiosity never left.
 
 In 1998 I started my adventure with Oracle databases, working on an OLTP system built on Oracle 8i. That was where I first encountered Oracle Reports, wrote my first complex SQL queries, learned to read Explain Plans, and began programming in PL/SQL.
 
@@ -17,7 +21,7 @@ My PL/SQL journey continued when I moved to a Data Warehouse project for the Pol
 
 ## Pragmatists and the Agile Turn
 
-In 2011, after eleven years at Pentacomp and increasingly frustrated with maintenance work and company policy, I made a significant step and joined Pragmatists on a contract basis.
+In 2011, after eleven years at Pentacomp and increasingly frustrated with maintenance work and company policy, I made a decision to own my career and joined Pragmatists.
 
 Working there was a turning point. It was a truly agile team focused on delivery, continuous integration, test automation, and short feedback loops. Pawel Lipinski and many others made it a unique environment. I learned things there that permanently changed how I approach my work:
 

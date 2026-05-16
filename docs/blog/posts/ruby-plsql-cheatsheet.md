@@ -15,6 +15,8 @@ tags:
 In my [previous posts](../posts/utplsql-vs-ruby-plsqlruby-plsql-spec-part-one.md) I did some writngs on [UTPLSQL](http://utplsql.sourceforge.net/) and [ruby-plsql](https://github.com/rsim/ruby-plsql).
 For long time, while developing Oracle code I was using ruby-plsql to do test driven development for SQL and PL/SQL.
 I used to frequently forget how to use some of the functionalities of ruby-plsql, specially after having a longer break and so each time I was referring the [Unit Tests supplied for the ruby-plsql library](https://github.com/rsim/ruby-plsql/tree/master/spec/plsql) as a reference. They are really nicely documenting how things work and how can they be used. It usually took me few minutes to find the thing I needed.
+
+<!-- more -->
 While I was actively using ruby-plsql for testing Oracle SQL and PLSQL code, it never occurred to me, that it would be nice to have some kind of cheat sheet, and so I wasted the valuable seconds and minutes to figure out how to do things I needed to do.
 This week however, Turntablez posted a suggestion [on ruby-plsql-spec github project page](https://github.com/rsim/ruby-plsql-spec/issues/21) that a cheat sheet would be something of a use.
 It was a really great idea, saves precious minutes when you need to use something you're not used to or just don't do every day.

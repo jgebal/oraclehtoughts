@@ -13,6 +13,9 @@ Test cases covered all the join conditions and all column transformations done a
 Thanks to the testing, we've managed to capture the issue while developing new code. It took me quite some time and head scratching to figure that it's actually an oracle bug.
 Creating an isolated test-case to reproduce the unexpected behavior really helped. With that I could confirm with 100% certainty that it's not coding issue but an actual BUG.
 I must mention that within my ~20 years of career as an SQL and PL/SQL developer I've never seen a bug like that.
+
+<!-- more -->
+
 As a result of that bug, query data is getting messed up when inserting into a table.
 The bug occurs only in very specific conditions and below examples illustrate this.
 Followup examples demonstrate workarounds for the bug.

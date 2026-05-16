@@ -1,8 +1,8 @@
 ---
-title: "UTPLSQL vs. ruby-plsql - exception handling"
+title: "utPLSQL v2 vs. ruby-plsql - exception handling"
 date:
   created: 2015-08-17
-slug: utplsql-vs-ruby-plsql-exception-handling
+slug: utplsql-v2-vs-ruby-plsql-exception-handling
 categories:
   - "PLSQL"
   - "ruby-plsql"
@@ -17,6 +17,8 @@ tags:
 
 I recently use utPLSQL in my daily work as a testing framework and I've noticed that the framework is doing quite bad job on exception handling on the tested code.
 I'll try to demonstrate it with a simple/yet realistic scenario.
+
+<!-- more -->
 
 # Scenario
 

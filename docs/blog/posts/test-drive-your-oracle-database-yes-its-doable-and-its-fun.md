@@ -17,6 +17,8 @@ tags:
 Over a month ago I've made a big decision and a shift in my life. I've decided to move to Ireland and start a new career there. Since I moved, I have significant amount of free time, as I no longer waste 3 hours each day on commuting. Also, since my wife still leaves in Poland (for now), I'm all on my own when I finish my work.
 Well, maybe that's not 100% true, since now we have Internet with Skype/Hangouts/appear.in and others.
 Anyway. I'm not feeling lonely, but rather take advantage of the time that is given to me, to catch up on things I've neglected for some time.
+
+<!-- more -->
 I spent some nice hours listening to speeches by Marting Fowler, Robert C. Martin, Gojko Adzic and John Seddon.
 On [Norwegian Developers Conference 2012](http://lanyrd.com/2012/ndc2012/), Robert C. Martin (Uncle Bob) was giving a speech on the Single Responsibility Rule.
 http://www.youtube.com/embed/Gt0M\_OHKhQE?autoplay=0&start=1339&end=1556&rel=0&showinfo=0&controls=1

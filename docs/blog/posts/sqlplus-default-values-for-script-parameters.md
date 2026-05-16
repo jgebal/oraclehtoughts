@@ -13,6 +13,9 @@ tags:
 
 While working heavily on script automation I came across the issue of having an SQLPlus script with optional parameter. Oracle does not allow that by default, and one needs to use a dirty trick to make it work. Vladimir made a great article on how to achieve that. Thank you Vlad, this is really helpful.
 [Vladimir's Diary: On SQL\*Plus Defines](http://vbegun.blogspot.nl/2008/04/on-sqlplus-defines.html).
+
+<!-- more -->
+
 I'll just add a use case, as there is not much more to add.
 I have a script that i'd like to run on the connected user's credentials and by default in the connected users schema.
 I'd also like it to accept a user's schema name, to execute in as a parameter.

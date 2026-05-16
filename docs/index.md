@@ -4,7 +4,7 @@ title: Home
 
 # Oracle Thoughts
 
-**Jacek Gebal** blog on Oracle database development, PL/SQL best practices, unit testing, and the [utPLSQL](https://utplsql.org) framework.
+**Jacek Gębal**s blog on Oracle database development, PL/SQL best practices, unit testing, and [utPLSQL](https://utplsql.org) framework.
 
 Contains my personal opinions and experiences.
 
@@ -20,4 +20,4 @@ Contains my personal opinions and experiences.
 
 ---
 
-Browse the **Blog** tab for all articles, or use the search above.
+Browse the [**Blog**](blog/index.md) tab for all articles, or use the search above.

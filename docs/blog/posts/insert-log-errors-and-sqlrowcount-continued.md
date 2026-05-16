@@ -9,6 +9,9 @@ categories:
 
 In my [previous post](../posts/insert-log-errors-and-sqlrowcount.md) I have described solution allowing you to obtain count of error rows that get inserted into error table when using Oracle SQL syntax of `INSERT INTO ... SELECT ... FROM ... LOG ERRORS`.
 The solution provided had a bug related to resetting counters.
+
+<!-- more -->
+
 You might say, that the problem was with how the function `dml_utils.get_count` was implemented. But in fact the problem is related to what requirements.
 The requirement was to be able to access counter value multiple times after the counter was populated in SQL Statement.
 At the same time we would like to be able to control when the counter gets reset.

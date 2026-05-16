@@ -12,9 +12,12 @@ tags:
   - "Performance"
 ---
 
-In my [previous post](../posts/plsql-performance-freak-series-functionprocedure-parameters-overhead.md "PL/SQL performance freak series – function/procedure parameters overhead") I've shown and measured the performance loss on passing the parameters to and from procedure/function call inside PL/SQL code.
-In this article I'm about to reveal another bottleneck that is often forgotten and not so easy to overcome.
-Suppose you need to have some value calculated. The formula is straight matematical calculation but the calculation will be used in multiple SQL statements across system and is therefore a perfect candidate for a PL/SQL function.
+In my [previous post](../posts/plsql-performance-freak-series-functionprocedure-parameters-overhead.md "PL/SQL performance freak series – function/procedure parameters overhead") I've shown and measured the performance loss on passing the parameters to and from procedure/function call inside PL/SQL code.
+In this article I'm about to reveal another bottleneck that is often forgotten and not so easy to overcome.
+
+<!-- more -->
+
+Suppose you need to have some value calculated. The formula is straight matematical calculation but the calculation will be used in multiple SQL statements across system and is therefore a perfect candidate for a PL/SQL function.
 I will use this sample formula:
 For every Odd value return 6, for every Even value return 3.
 
@@ -22,7 +25,7 @@ For every Odd value return 6, for every Even value return 3.
 case mod( X , 2 ) when 1 then 6 else 3 end
 ```
 
-So the PL/SQL implementing the formula is:
+So the PL/SQL implementing the formula is:
 
 ```sql
 CREATE OR REPLACE FUNCTION get_val( val IN INTEGER ) RETURN INTEGER IS
@@ -62,8 +65,8 @@ Calculate using inline calculation in SQL
 Elapsed: 00:00:01.212
 ```
 
-The SELECT statement with function call was **over 10 times slower** than the inline calculation (when running  on 1.2 million rows).
-As [Tom Kyte explained in his answer](https://asktom.oracle.com/pls/apex/f?p=100:11:0::::P11_QUESTION_ID:60122715103602), SQL and PL/SQL are two separate languages with two separate runtime engines and each function call causes a context switch.
+The SELECT statement with function call was **over 10 times slower** than the inline calculation (when running  on 1.2 million rows).
+As [Tom Kyte explained in his answer](https://asktom.oracle.com/pls/apex/f?p=100:11:0::::P11_QUESTION_ID:60122715103602), SQL and PL/SQL are two separate languages with two separate runtime engines and each function call causes a context switch.
 How would the query perform, if we would have 2 function calls in it?
 
 ```sql
@@ -96,5 +99,5 @@ Elapsed: 00:00:01.210
 As expected, with two function calls from SQL statements, the overhead was doubled. Now the code with function calls runs almost 30 times slower than the inline version.
 Now that the issue was clearly shown, some questions should be answered.
 - Is it always an issue?
-- What can be done to maintain the function encapsulation (have the code DRY) and keep high performance?
-I will give some answers to that on my next post.
+- What can be done to maintain the function encapsulation (have the code DRY) and keep high performance?
+I will give some answers to that on my next post.

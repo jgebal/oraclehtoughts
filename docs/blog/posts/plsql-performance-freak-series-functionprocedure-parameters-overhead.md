@@ -15,19 +15,22 @@ tags:
 When writing a PL/SQL code, I usually use following strategy:
 
 - If the code that I'm calling is returning a calculated value, it should be a function.
-- If the code that I'm calling is doing some DB operations and is not returning a value, it should be a procedure.
+- If the code that I'm calling is doing some DB operations and is not returning a value, it should be a procedure.
 
-There are however some situations, when I tend to break the rule, and this is due to performance.
+There are however some situations, when I tend to break the rule, and this is due to performance.
+
+<!-- more -->
+
 In Oracle PL/SQL, following rules apply to the parameters passed and returned from functions and procedures:
 
 - All IN parameters of procedure are passed by pointer. Variable is not copied when program block is called. The program block however is not allowed to modify the variable value.
-- All OUT and IN/OUT parameters are passed by value. Variable is copied when program block is called, so the program can modify a copy of the variable. When the program block completes without error, the original variable is overwritten with the modified copy. If the program block raises exception, the original value remains unchanged.
+- All OUT and IN/OUT parameters are passed by value. Variable is copied when program block is called, so the program can modify a copy of the variable. When the program block completes without error, the original variable is overwritten with the modified copy. If the program block raises exception, the original value remains unchanged.
 - Values returned by functions conform to the above rule.
-- The OUT and IN/OUT parameters can be passed by reference if we use the NOCOPY directive for them. This is however not available for function return value.
+- The OUT and IN/OUT parameters can be passed by reference if we use the NOCOPY directive for them. This is however not available for function return value.
 
-I was aware of the above since a very long time, but it never came into my mind to measure the actual overhead that the copy operation may introduce to your code.
-This post aims to show, the overhead you may encounter, when using functions, or procedures with OUT and IN/OUT parameters.
-In the following example I create 3 test program units.
+I was aware of the above since a very long time, but it never came into my mind to measure the actual overhead that the copy operation may introduce to your code.
+This post aims to show, the overhead you may encounter, when using functions, or procedures with OUT and IN/OUT parameters.
+In the following example I create 3 test program units.
 A function that just returns the passed value.
 
 ```sql
@@ -58,7 +61,7 @@ END;
 /
 ```
 
-I used a simple testing procedure to run the test on varchar parameters passed to all three program units created with above code.
+I used a simple testing procedure to run the test on varchar parameters passed to all three program units created with above code.
 
 ```sql
 CREATE OR REPLACE PROCEDURE run_test(string_len INTEGER, iter INTEGER) IS
@@ -143,10 +146,10 @@ Took: 2.65 sec. for tst_proc_nocopy(v);
 Observations
 
 - Function calls perform similar to procedure calls with IN/OUT parameters.
-- The NOCOPY directive reduces the copy overhead and causes the call to be twice as fast then the function or regular procedure.
+- The NOCOPY directive reduces the copy overhead and causes the call to be twice as fast then the function or regular procedure.
 - The bigger the variable that is passed, the bigger the boost going up to 22 times faster for single VARCHAR2 parameter.
 
 Conclusions
-If you're writing a PL/SQL code that is to be very intensively used, and is to perform really good, use procedures with NOCOPY rather than functions, even if it makes your code not so readable, as it it when a variable is assigned a value returned by function.
-Of course, if the function/procedure is to be called infrequently, you may forget about the overhead and continue with the good practices for code clarity.
+If you're writing a PL/SQL code that is to be very intensively used, and is to perform really good, use procedures with NOCOPY rather than functions, even if it makes your code not so readable, as it it when a variable is assigned a value returned by function.
+Of course, if the function/procedure is to be called infrequently, you may forget about the overhead and continue with the good practices for code clarity.
 As usual, everything is relative.

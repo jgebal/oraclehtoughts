@@ -1,8 +1,8 @@
 ---
-title: "UTPLSQL vs. ruby-plsql/ruby-plsql-spec – implicit datatype conversion traps"
+title: "utPLSQL v2 vs. ruby-plsql/ruby-plsql-spec – implicit datatype conversion traps"
 date:
   created: 2015-08-11
-slug: utplsql-vs-ruby-plsqlruby-plsql-spec-implicit-datatype-conversion-traps
+slug: utplsql-v2-vs-ruby-plsqlruby-plsql-spec-implicit-datatype-conversion-traps
 categories:
   - "PLSQL"
   - "ruby-plsql"
@@ -16,6 +16,8 @@ tags:
 
 [![UTPLSQL_vs_RSpec](../../images/UTPLSQL_vs_RSpec.png)](../posts/utplsql-vs-ruby-plsqlruby-plsql-spec-implicit-datatype-conversion-traps.md)
 This post is a continuation of the utPLSQL vs. ruby-plsql series, you might want to have a look at my previous post for introduction and some basics.
+
+<!-- more -->
 
 # Foreword
 

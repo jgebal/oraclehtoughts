@@ -11,6 +11,8 @@ Oracle SQL has a really neat feature to log the rows that failed to be processed
 This is really great feature and you cen read a lot more about it on [oracle-base.com](https://oracle-base.com/articles/10g/dml-error-logging-10gr2)
 The thing I was wondering about is, if I log errors and my DML statement fails, how can I know if that statement had some errored rows.
 I've checked documentation and asked some experts on Twitter but seems there was no feature to support that.
+
+<!-- more -->
 ![](../../images/log_errors_tweet-1.png)
 Example:
 

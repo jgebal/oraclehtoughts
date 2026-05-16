@@ -12,8 +12,11 @@ tags:
 ---
 
 [![mergesign](../../images/mergesign-300x200.jpg)](../../images/mergesign.jpg)
-Oracle database does not support ability to obtain number of rows inserted/updated/deleted by a merge operation.
+Oracle database does not support ability to obtain number of rows inserted/updated/deleted by a merge operation.
 The only value you can obtain is the total number of rows affected by merge operation.
+
+<!-- more -->
+
 Consider the following example.
 Setup.
 

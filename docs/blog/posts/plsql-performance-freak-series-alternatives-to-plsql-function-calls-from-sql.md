@@ -13,14 +13,17 @@ tags:
   - "Performance"
 ---
 
-Last week I revealed the numbers standing behind the overhead of calling a Pl/SQL function from within an SQL statement.
+Last week I revealed the numbers standing behind the overhead of calling a Pl/SQL function from within an SQL statement.
 I've left two questions open:
 - Is it always a performance issue, when you call a PL/SQL function from a SQL statement?
-- What can be done to maintain the function encapsulation (have the code DRY) and keep high performance?
+- What can be done to maintain the function encapsulation (have the code DRY) and keep high performance?
+
+<!-- more -->
+
 Lets take it one by one.
-To see if it is always an issue, lets run some tests. We will be running the SQL statements with inlined calculation formula and PL/SQL function call using different SQL result sizes and different number of executions.
-For simplicity and clarity. The function i used does not use DETERMINISTIC nor RESULT\_CACHE keyword. In the examples, i assume that you run the function on data unique data, so that each function call is unique.
-I've made those assumptions only to clearly isolate the issue with PL/SQL function call overhead. If the function calls are repeatable, you could benefit from the DETERMINISTIC or RESULT\_CACHE, but this is out of scope of the article, so I will not investigate it further now.
+To see if it is always an issue, lets run some tests. We will be running the SQL statements with inlined calculation formula and PL/SQL function call using different SQL result sizes and different number of executions.
+For simplicity and clarity. The function i used does not use DETERMINISTIC nor RESULT\_CACHE keyword. In the examples, i assume that you run the function on data unique data, so that each function call is unique.
+I've made those assumptions only to clearly isolate the issue with PL/SQL function call overhead. If the function calls are repeatable, you could benefit from the DETERMINISTIC or RESULT\_CACHE, but this is out of scope of the article, so I will not investigate it further now.
 In my previous post I compared the simple SQL statement performance with or without PL/SQL function call. The comparison was done on 1,2 million rows. how does it look when we process less rows with our queries? Is it still a pain? Do we need to worry? How much of a pain is it? Let's check.
 I will use the function implementation as before.
 
@@ -111,7 +114,7 @@ In my daily work I use the following pattern.
 If it is small and is not called frequently, I don't hesitate to use all the goodies of PL/SQL in SQL.
 If it is big or called really often, I avoid this approach as much as possible.
 Now, lets go to the second question.
-What can be done to maintain the function encapsulation (have the code DRY) and keep high performance?
+What can be done to maintain the function encapsulation (have the code DRY) and keep high performance?
 There are several ways to keep the performance:
 - Keep everything inlined in SQL queries
 - Encapsulate the calculation with Views

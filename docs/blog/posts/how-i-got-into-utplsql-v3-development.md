@@ -5,6 +5,7 @@ date:
 slug: how-i-got-into-utplsql-v3-development
 categories:
   - "PLSQL"
+  - "utPLSQL"
   - "testing"
 tags:
   - "Oracle"
@@ -13,13 +14,15 @@ tags:
 ---
 
 Winter is coming and the 7th season of *Game of Thrones* now just a memory. While I do love watching TV series it was not them that dragged me away from my blog.
- 
+ 
 For last 18 months or so, I was heavily involved in design and development of new version of utPLSQL v3.
 After a year of development, we've published utPLSQL version 3.0.0 in May 2017 and now we are at version 3.0.3.
 
+<!-- more -->
+
 #### Why I've decided to get involved in the project?
 
-The reason for getting involved was  that there still was room for a good Unit Testing framework for Oracle SQL and PL/SQL.
+The reason for getting involved was  that there still was room for a good Unit Testing framework for Oracle SQL and PL/SQL.
 I've used [ruby-plsql](https://github.com/rsim/ruby-plsql) a lot and I was very happy with it, however it has one big disadvantage - it's Ruby.
 For some projects, adding Ruby language to development stack, just for the sake of Unit Testing is just too much. I still consider the framework a brilliant solution and it's definitely something that utPLSQL v3 is aspiring for.
 Using frameworks in languages like Ruby/Java etc. to test database has one significant downside - performance. The fact that every interaction with database is a context switch between Java/Ruby and Oracle database significantly impacts the execution time of tests.
@@ -79,6 +82,6 @@ Here is a list with some of qualities utPLSQL version 3:
 #### Getting involved
 
 The team developing utPLSQL v3 is a group of passionate Oracle engineers spending their spare time to deliver well designed, continuously tested, high quality product.
-The hope is that,  utPLSQL v3 will bring Unit Testing and Test Driven Development practices into Oracle Developer community and we will finally catchup on engineering practives with Object Oriented programming world.
- 
+The hope is that,  utPLSQL v3 will bring Unit Testing and Test Driven Development practices into Oracle Developer community and we will finally catchup on engineering practives with Object Oriented programming world.
+ 
 If you want to get involved, read the [contributing guide](https://github.com/utPLSQL/utPLSQL/blob/develop/CONTRIBUTING.md) and join our Slack channel - link available in the [projects readme.](https://github.com/utPLSQL/utPLSQL)

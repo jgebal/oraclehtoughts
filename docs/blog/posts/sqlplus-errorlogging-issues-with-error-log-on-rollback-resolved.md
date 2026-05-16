@@ -13,16 +13,19 @@ tags:
   - "sqlplus"
 ---
 
-Today I came up with idea to overcome the issue: [SQLPlus ERRORLOGGING does not keep error log on rollback](../posts/sqlplus-errorlogging-does-not-keep-error-log-on-rollback.md "SQLPlus ERRORLOGGING does not keep error log on rollback").
+Today I came up with idea to overcome the issue: [SQLPlus ERRORLOGGING does not keep error log on rollback](../posts/sqlplus-errorlogging-does-not-keep-error-log-on-rollback.md "SQLPlus ERRORLOGGING does not keep error log on rollback").
 The resolution is to use autonomous transactions to log the errors reported by SQL Plus.
 What we need to do is to somehow catch the error that is about to be logged and wrap it in an autonomous transaction.
+
+<!-- more -->
+
 The features that we will use are:
 
 - a VIEW
 - a ["INSTEAD OF" TRIGGER](http://docs.oracle.com/cd/E11882_01/appdev.112/e25519/triggers.htm#LNPLS20041)
 - a procedure that works in an [autonomous transaction](http://docs.oracle.com/cd/B28359_01/server.111/b28318/transact.htm#CNCPT417)
 
-Create the error logging table.
+Create the error logging table.
 
 ```sql
 CREATE TABLE sperrorlog(

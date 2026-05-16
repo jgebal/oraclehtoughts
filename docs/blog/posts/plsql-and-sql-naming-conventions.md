@@ -12,6 +12,8 @@ Some time back I've read [Mike Smithers Blog on SQL and PL/SQL standards](https:
 Being Oracle developer for over 15 years should make me comply with all of the mostly demanding standards there are. My nature however always tells me to look at the balance the costs and benefits of my actions.
 Mike pointed out a good amount of issues, when it comes to introducing coding standards and how important it is to keep it simple.
 Naming conventions can also become a true bottleneck and make the database structures and code change-resistant.
+
+<!-- more -->
 Consider such simple convention for naming database objects.
 
 ```

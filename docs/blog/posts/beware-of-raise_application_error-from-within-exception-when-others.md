@@ -10,12 +10,12 @@ tags:
   - "exception handling"
 ---
 
-### Intro
-
 Most of use-cases for current Oracle databases involve some kind of application server that is managing database connection pool.
 The pool is keeping database connections open for long time to avoid the overhead of connect/disconnect handshakes.
 Taking into consideration, that deployment of database changes, is more and more often required to be done seamlessly, with minimum or even zero down time, the changes must be applied in a way that they do not significantly impact the open connections and do not enforce the connection pool recycling.
 This is related to the fact that we want to minimize the scale of impact of particular deployment on a working, living environment.
+
+<!-- more -->
 
 ### The stateful package
 
@@ -122,7 +122,7 @@ Package body altered.
 SQL>
 ```
 
- 
+ 
 What has happened to sessions 1 and 2, since they were open before the session 3 kicked in and recompiled the package?
 
 ```sql

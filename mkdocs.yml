@@ -53,8 +53,8 @@ markdown_extensions:
   - tables
   - toc:
       permalink: true
-#nav:
-#  - Home: index.md
-#  - Blog:
-#      - blog/index.md
-#  - About: about.md
+nav:
+  - Home: index.md
+  - Blog:
+      - blog/index.md
+  - About: about.md

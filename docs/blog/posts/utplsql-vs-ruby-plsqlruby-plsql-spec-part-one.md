@@ -1,8 +1,8 @@
 ---
-title: "UTPLSQL vs. ruby-plsql/ruby-plsql-spec - part one"
+title: "utPLSQL v2 vs. ruby-plsql/ruby-plsql-spec - part one"
 date:
   created: 2015-06-14
-slug: utplsql-vs-ruby-plsqlruby-plsql-spec-part-one
+slug: utplsql-v2-vs-ruby-plsqlruby-plsql-spec-part-one
 categories:
   - "PLSQL"
   - "SQL"
@@ -16,7 +16,7 @@ tags:
   - "unit testing"
 ---
 
-[![UTPLSQL_vs_RSpec](../../images/UTPLSQL_vs_RSpec-300x56.png)](../posts/utplsql-vs-ruby-plsqlruby-plsql-spec-part-one.md)
+![UTPLSQL_vs_RSpec](../../images/UTPLSQL_vs_RSpec-300x56.png)
 
 # Foreword
 
@@ -28,23 +28,25 @@ UI based frameworks for unit testing are putting a high abstraction and tight fa
 Variety of program units that are possible to develop is infinite and the only limitations to what the unit can do are the programming language boundaries and developers creativity. For this reason itself, it is best to use a programming language of similar or higher flexibility to describe and test the behaviour for a unit.
 In this series of article I will focus on two programming language-based unit testing frameworks for Oralce, that I got familiar with and had opportunity to use.
 
+<!-- more -->
+
 ---
 
 # History and numbers
 
 [UTPLSQL](http://utplsql.sourceforge.net/) created by Steven Feuerstein in 2000 - yes 15 years ago!
 It was maintained till 2005, then the project died for 8 years. It was revitalised in 2014. It had [13 releases](http://sourceforge.net/projects/utplsql/files/utPLSQL/) up till 06.2015.
-The total downloads of the project according to [sourceforge stats](http://sourceforge.net/projects/utplsql/files/utPLSQL/stats/timeline?dates=2000-06-15+to+2015-06-21) is ~47 000
-It seems to become quite popular among Oracle developers and therefore revitalized. I heard people in Poland knowing at least what it is. I'm aware of few quite large companies that actually use it as a tool of choice.
-[ruby-plsql](https://github.com/rsim/ruby-plsql) created by [Raimonds Simanovskis](http://blog.rayapps.com/tags/ruby-plsql/) was first released in 2008, eight years after UTPLSQL.
+The total downloads of the project according to [sourceforge stats](http://sourceforge.net/projects/utplsql/files/utPLSQL/stats/timeline?dates=2000-06-15+to+2015-06-21) is ~47 000
+It seems to become quite popular among Oracle developers and therefore revitalized. I heard people in Poland knowing at least what it is. I'm aware of few quite large companies that actually use it as a tool of choice.
+[ruby-plsql](https://github.com/rsim/ruby-plsql) created by [Raimonds Simanovskis](http://blog.rayapps.com/tags/ruby-plsql/) was first released in 2008, eight years after UTPLSQL.
 Since then it had [15 releases](https://github.com/rsim/ruby-plsql/releases) till 06.2015.
-It was downloaded over 68 000 times as a Ruby gem, [according to rubygems.org](https://rubygems.org/search?utf8=%E2%9C%93&query=ruby-plsql)
-[ruby-plsql-spec](https://github.com/rsim/ruby-plsql-spec) created by [Raimonds Simanovskis](http://blog.rayapps.com/tags/ruby-plsql/) is a neat utility library on top of ruby-plsql that aims to ease all the fuss around setup for RSpec unit testing easier. It also provides [code-coverage reporting](http://blog.rayapps.com/2010/10/05/ruby-plsql-spec-gem-and-code-coverage-reporting/).
+It was downloaded over 68 000 times as a Ruby gem, [according to rubygems.org](https://rubygems.org/search?utf8=%E2%9C%93&query=ruby-plsql)
+[ruby-plsql-spec](https://github.com/rsim/ruby-plsql-spec) created by [Raimonds Simanovskis](http://blog.rayapps.com/tags/ruby-plsql/) is a neat utility library on top of ruby-plsql that aims to ease all the fuss around setup for RSpec unit testing easier. It also provides [code-coverage reporting](http://blog.rayapps.com/2010/10/05/ruby-plsql-spec-gem-and-code-coverage-reporting/).
 It had 4 releases and is currently in version 0.4.0.
 It was downloaded over 5 000 times as a Ruby gem, [according to rubygems.org](https://rubygems.org/search?utf8=%E2%9C%93&query=ruby-plsql-spec)
 [RSpec](https://www.relishapp.com/rspec) is an industry standard Ruby Unit Testing framework for [Behaviour Driven Development (BDD)](https://en.wikipedia.org/wiki/RSpec).
 It was first released in 07.2005 and since then had 159 versions published.
-It was downloaded over 24 000 000 times [according to rubygems.org](https://rubygems.org/gems/rspec)
+It was downloaded over 24 000 000 times [according to rubygems.org](https://rubygems.org/gems/rspec)
 
 ---
 
@@ -52,7 +54,7 @@ It was downloaded over 24 000 000 times [according to rubygems.org](https://rub
 
 Before I dig into the details, I'd like to give a big thank you to Steven Feuerstein for creating UTPLSQL.
 Creation of UTPLSQL was an enormous achievement. It was the first successful initiative to take Oracle database Unit Testing seriously and provide set of tools for writing unit tests for SQL and PLSQL code.
-I'd like to thank Raimonds Simanovskis for taking the challenge to build a more flexible future-proofed and feature rich library for Oracle unit testing. Thanks to the library, within months, two database developers without any former knowledge of Ruby, RSpec and the library, managed to create over 1500 valuable unit tests for a complex, computation intensive, legacy database system. Tests were automatically pulled from version control system into continuous integration server and were actually delivering continuous feedback for the 6-person database development team. The tests became indicators of the quality and stability of the developed database and provided a safety harness for huge refactoring and performance improvements, that no one would dare to do without the tests giving certainty that all the functional requirements are still met.
+I'd like to thank Raimonds Simanovskis for taking the challenge to build a more flexible future-proofed and feature rich library for Oracle unit testing. Thanks to the library, within months, two database developers without any former knowledge of Ruby, RSpec and the library, managed to create over 1500 valuable unit tests for a complex, computation intensive, legacy database system. Tests were automatically pulled from version control system into continuous integration server and were actually delivering continuous feedback for the 6-person database development team. The tests became indicators of the quality and stability of the developed database and provided a safety harness for huge refactoring and performance improvements, that no one would dare to do without the tests giving certainty that all the functional requirements are still met.
 
 # A note on naming used in comparison
 

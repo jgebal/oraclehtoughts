@@ -1,8 +1,8 @@
 ---
-title: "utPLSQL vs. ruby-plsql - Running Oracle unit tests on Jenkins CI"
+title: "utPLSQL v2 vs. ruby-plsql - Running Oracle unit tests on Jenkins CI"
 date:
   created: 2015-07-11
-slug: utplsql-vs-ruby-plsql-running-oracle-unit-tests-on-jenkins-ci
+slug: utplsql-v2-vs-ruby-plsql-running-oracle-unit-tests-on-jenkins-ci
 categories:
   - "testing"
 tags:
@@ -15,8 +15,11 @@ tags:
   - "unit testing"
 ---
 
-[![utPLSQL_vs_RSpec](../../images/utPLSQL_vs_RSpec-300x56.png)](../posts/utplsql-vs-ruby-plsqlruby-plsql-spec-part-three.md)
-I my [previous posts](../posts/utplsql-vs-ruby-plsqlruby-plsql-spec-part-one.md) I have described some differences between utPLSQL and ruby-plsql. This time I want to focus on automating the test execution with each of those frameworks using [Jenkins Continuous Integration](https://jenkins-ci.org/).
+![utPLSQL_vs_RSpec](../../images/UTPLSQL_vs_RSpec-300x56.png)
+
+In my [previous posts](../posts/utplsql-vs-ruby-plsqlruby-plsql-spec-part-one.md) I have described some differences between utPLSQL and ruby-plsql. This time I want to focus on automating the test execution with each of those frameworks using [Jenkins Continuous Integration](https://jenkins-ci.org/).
+
+<!-- more -->
 
 # The reasons for continuous testing
 

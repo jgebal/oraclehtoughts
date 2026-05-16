@@ -14,6 +14,9 @@ tags:
 
 In utPLSQL v2 you had to use 'quoted text to compare tables / queries.
 utPLSQL v3 allows you to compare table data using native refcursors without usage of dynamic SQL.
+
+<!-- more -->
+
 In v2 with you would use syntax
 
 ```sql
@@ -76,6 +79,6 @@ Additionally, you can exclude columns (or elements of complex types in cursor co
 One thing to keep in mind, is that in utPLSQL v3, order matters. Cursor data is compared in a sorted manner.
 This makes the comparison more strict, as you can check if data is properly ordered in the result-set.
 It becomes useful when validating ordering of cursor data returned by procedure or function.
- 
+ 
 utPSLQL v2 documentaion on [utassert](http://utplsql.org/utPLSQL/v2.3.1/utassert.html#utassert.eqtable)
 utPLSQL v3.0.3 documentation on [expectations](http://utplsql.org/utPLSQL/v3.0.3/userguide/expectations.html)

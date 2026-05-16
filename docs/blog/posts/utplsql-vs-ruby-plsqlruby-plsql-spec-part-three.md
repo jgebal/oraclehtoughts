@@ -1,8 +1,8 @@
 ---
-title: "UTPLSQL vs. ruby-plsql/ruby-plsql-spec - part three - (not) reporting failures"
+title: "utPLSQL v2 vs. ruby-plsql/ruby-plsql-spec - part three - (not) reporting failures"
 date:
   created: 2015-06-28
-slug: utplsql-vs-ruby-plsqlruby-plsql-spec-part-three
+slug: utplsql-v2-vs-ruby-plsqlruby-plsql-spec-part-three
 categories:
   - "PLSQL"
   - "testing"
@@ -15,8 +15,11 @@ tags:
   - "unit testing"
 ---
 
-[![UTPLSQL_vs_RSpec](../../images/UTPLSQL_vs_RSpec-300x56.png)](../posts/utplsql-vs-ruby-plsqlruby-plsql-spec-part-three.md)
+![UTPLSQL_vs_RSpec](../../images/UTPLSQL_vs_RSpec-300x56.png)
+
 I have finished my [previous post](../posts/utplsql-vs-ruby-plsqlruby-plsql-spec-part-two.md) with comparison of basic reporting capabilities build into UTPLSQL and ruby-plsql frameworks for Oracle unit testing.
+
+<!-- more -->
 
 # Additional reporting options for ruby-plsql
 
